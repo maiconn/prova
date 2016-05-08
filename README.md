@@ -1,4 +1,4 @@
-Projeto que salva, lista e mostra a previsão do tempo de cidades
+Projeto que salva, lista e mostra a previsão do tempo de cidades utilizando a api http://openweathermap.org/
 
 # Bibliotecas Utilizadas Backend
 - jersey
