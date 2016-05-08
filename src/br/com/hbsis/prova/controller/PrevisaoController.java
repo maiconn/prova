@@ -27,10 +27,18 @@ public class PrevisaoController {
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
 
-			if (conn.getResponseCode() != 200) {
-				return false;
+			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+			StringBuilder retorno = new StringBuilder();
+			String msg = "";
+			while ((msg = br.readLine()) != null) {
+				retorno.append(msg);
 			}
 
+			if (conn.getResponseCode() != 200 || retorno.toString().contains("\"cod\":\"404\"")) {
+				return false;
+			}
+			
 			conn.disconnect();
 			cidadeDAO.inserirCidade(cidade);
 			return true;
