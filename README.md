@@ -7,6 +7,7 @@ Projeto que salva, lista e mostra a previsão do tempo de cidades
 # Bibliotecas Utilizadas Frontend
 - Bootstrap 
 - AngularJS
+- jQUery
 
 #Servidor de Aplicação
 - TomEE Plume (apache-tomee-1.7.4-plume)
