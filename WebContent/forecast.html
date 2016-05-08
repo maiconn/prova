@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="forecastApp">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<title>Previsão do Tempo</title>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.js"></script>
+<script>
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+angular.module("forecastApp", ['ngResource']);
+angular.module("forecastApp").controller("forecastCtrl", ['$scope', '$resource', function($scope, $resource) {
+	$scope.forecast = [];
+	$scope.carregarForecast = function(){
+		var request = "/prova/previsao/forecast/" + getParameterByName("cidade");
+		$.get(request, function(data) {
+			$scope.forecast = data;
+			$scope.$apply();
+		});
+	};
+	
+	$scope.carregarForecast();
+} ]);
+</script>
+</head>
+<body ng-controller="forecastCtrl">
+	<div class="container">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{forecast.city.name}} -
+					{{forecast.city.country}}</h3>
+			</div>
+			<div class="panel-body">
+				<div class="panel panel-default" ng-repeat="dados in forecast.list">
+					<div class="panel-body">
+						<b>Data: </b> {{dados.dt_txt}} <br />
+						
+						<b>Temperatura:</b> <br />
+							Máxima: {{dados.main.temp_max}}ºC <br />
+							Mínina: {{dados.main.temp_min}}ºC	<br />
+							Humidade: {{dados.main.humidity}}%<br />
+						<b>Clima: </b> 
+						<div  ng-repeat="weather in dados.weather">
+							{{weather.main}} - {{weather.description}} <br />
+						</div>
+						
+						<b>Núvens: </b> {{dados.clouds.all}}% <br />
+						
+						<b>Vento: </b> {{dados.wind.speed}}m/s <br />
+						
+												
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js"
+		integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7"
+		crossorigin="anonymous"></script>
+</body>
+</html>
